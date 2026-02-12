@@ -9,6 +9,7 @@ import UIKit
 
 extension UIView {
     func gradient(){
+        layer.sublayers?.first { $0 is CAGradientLayer }?.removeFromSuperlayer()
         let gradient = CAGradientLayer()
         gradient.colors = [
             UIColor.init(red: 255/255, green: 119/255, blue: 250/255, alpha: 0).cgColor,
@@ -26,7 +27,9 @@ extension UIView {
         gradient.opacity = 0.8
         
         
-                
+        
         layer.insertSublayer(gradient, at: 0)
     }
+    
+   
 }

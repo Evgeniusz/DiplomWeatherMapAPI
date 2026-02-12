@@ -22,12 +22,53 @@ class ViewController: UIViewController, CLLocationManagerDelegate, IView {
     
     let bigOffset: CGFloat = 50
     let standartOffset: CGFloat = 16
+    let buttonStandartHeight: CGFloat = 30
     var windSpeed: Double = 4.01
+    
+    private let currentButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.setTitle("Current Geo Location", for: .normal)
+        button.contentHorizontalAlignment = .center
+        button.setTitleColor(.white, for: .normal)
+        button.titleLabel?.font = .systemFont(ofSize: 25, weight: .thin)
+        return button
+    }()
+    
+    private let textFieldCityRequest: UITextField = {
+        let textField = UITextField()
+        textField.placeholder = "Find City"
+        textField.textColor = .white
+        textField.layer.borderWidth = 1
+        textField.layer.borderColor = UIColor.white.cgColor
+        textField.textAlignment = .center
+        textField.font = .systemFont(ofSize: 25, weight: .thin)
+        return textField
+    }()
+    
+    private let buttonFindForTextField: UIButton = {
+        let button = UIButton(type: .system)
+        button.setImage(.glass, for: .normal)
+        button.tintColor = .white
+        return button
+    }()
+    
+    private let burgerButtion: UIButton = {
+        let button = UIButton(type: .system)
+        button.setTitleColor(.white, for: .normal)
+        button.setTitle("☰", for: .normal)
+        button.titleLabel?.font = .boldSystemFont(ofSize: 40)
+        return button
+    }()
     
     private let generalView: UIView = {
         let view = UIView()
         view.backgroundColor = .systemBlue
         
+        return view
+    }()
+    
+    private let generalViewForMenu: UIView = {
+        let view = UIView()
         return view
     }()
     
@@ -46,7 +87,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, IView {
         label.numberOfLines = 0
         label.textColor = .white
         label.textAlignment = .center
-        label.font = .systemFont(ofSize: 28, weight: .bold)
+        label.font = .systemFont(ofSize: 50, weight: .light)
         label.text = "Minsk"
         return label
     }()
@@ -61,8 +102,8 @@ class ViewController: UIViewController, CLLocationManagerDelegate, IView {
         let label = UILabel()
         label.numberOfLines = 0
         label.textColor = .white
-        label.textAlignment = .right
-        label.font = .systemFont(ofSize: 120, weight: .bold)
+        label.textAlignment = .center
+        label.font = .systemFont(ofSize: 120, weight: .thin)
         label.text = "-16"
         return label
     }()
@@ -83,6 +124,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, IView {
         label.textColor = .white
         label.textAlignment = .center
         label.font = .systemFont(ofSize: 20, weight: .light)
+        label.text = "No data, check for e connection"
         return label
     }()
     
@@ -112,8 +154,9 @@ class ViewController: UIViewController, CLLocationManagerDelegate, IView {
         // Do any additional setup after loading the view.
         view.backgroundColor = .systemBlue
         navigationController?.navigationBar.isHidden = true
+        burgerButtonAction()
+        currentButtonAction()
         start()
-        
     }
     
     override func viewDidLayoutSubviews() {
@@ -121,13 +164,14 @@ class ViewController: UIViewController, CLLocationManagerDelegate, IView {
         generalView.gradient()
     }
     
-    
     func start(){
         presenter.cityRequest()
     }
 
     func addAllViews(){
         view.addSubview(generalView)
+        view.addSubview(generalViewForMenu)
+        view.addSubview(burgerButtion)
         generalView.addSubview(viewForImageTempCity)
         generalView.addSubview(viewForWindDirectionFells)
         viewForImageTempCity.addSubview(labelCity)
@@ -138,11 +182,26 @@ class ViewController: UIViewController, CLLocationManagerDelegate, IView {
         viewForWindDirectionFells.addSubview(feelsLikeLabel)
         windDirectionView.addSubview(windLabel)
         windDirectionView.addSubview(windDirection)
+        
+        generalViewForMenu.addSubview(currentButton)
+        generalViewForMenu.addSubview(buttonFindForTextField)
+        generalViewForMenu.addSubview(textFieldCityRequest)
     }
     
     func allConstraints(){
         generalView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
+        }
+        
+        generalViewForMenu.snp.makeConstraints { make in
+            make.width.height.equalTo(generalView)
+            make.right.equalTo(generalView.snp.left)
+            make.top.equalTo(generalView.snp.top)
+        }
+        
+        burgerButtion.snp.makeConstraints { make in
+            make.left.equalToSuperview().offset(standartOffset)
+            make.top.equalToSuperview().offset(bigOffset)
         }
         
         viewForImageTempCity.snp.makeConstraints { make in
@@ -159,7 +218,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, IView {
             make.top.equalToSuperview().offset(bigOffset)
             make.centerX.equalToSuperview()
             make.width.equalToSuperview().dividedBy(1.5)
-            make.height.equalTo(labelCity.snp.width).dividedBy(8)
+            make.height.equalTo(labelCity.snp.width).dividedBy(4)
         }
         
         imageWeather.snp.makeConstraints { make in
@@ -170,10 +229,10 @@ class ViewController: UIViewController, CLLocationManagerDelegate, IView {
         }
         
         tempLabel.snp.makeConstraints { make in
-            make.right.equalTo(imageWeather.snp.right)
-            make.top.equalTo(labelCity.snp.bottom)
-            make.width.equalToSuperview().dividedBy(1.5)
-            make.height.equalTo(tempLabel.snp.width).dividedBy(1.7)
+            make.right.left.equalToSuperview()
+            make.top.equalTo(labelCity.snp.top).offset(bigOffset)
+            make.width.equalToSuperview()
+            make.height.equalTo(tempLabel.snp.width).dividedBy(3)
         }
         
         windDirectionView.snp.makeConstraints { make in
@@ -198,12 +257,33 @@ class ViewController: UIViewController, CLLocationManagerDelegate, IView {
             make.center.equalToSuperview()
             make.width.height.equalToSuperview()
         }
+        
+        currentButton.snp.makeConstraints { make in
+            make.top.equalTo(labelCity.snp.top).offset(standartOffset)
+            make.left.right.equalToSuperview()
+            make.height.equalTo(standartOffset).multipliedBy(2)
+        }
+        
+        buttonFindForTextField.snp.makeConstraints { make in
+            make.right.equalToSuperview().inset(standartOffset)
+            make.top.equalTo(currentButton.snp.bottom).offset(standartOffset)
+            make.width.height.equalTo(buttonStandartHeight)
+        }
+        
+        textFieldCityRequest.snp.makeConstraints { make in
+            make.left.equalToSuperview().offset(bigOffset)
+            make.right.equalTo(buttonFindForTextField.snp.left).offset(-standartOffset)
+            make.top.bottom.equalTo(buttonFindForTextField)
+        }
+        
+        
     }
     
     func updateView(data: MainParsing) {
         addAllViews()
         allConstraints()
-        labelCity.text = data.timeZone?.split(separator: "/").last.map(String.init)
+        guard let timeZone = data.timeZone else {return}
+        labelCity.text = timeZone.split(separator: "/").last.map(String.init)
         guard let icon = data.current?.weather?[0].icon else {return}
         imageWeather.image = UIImage(named: icon)
         guard let temp = data.current?.temp else {return}
@@ -231,6 +311,56 @@ class ViewController: UIViewController, CLLocationManagerDelegate, IView {
     
     func updateWindDirection(radiance: CGFloat) {
         windDirection.transform = CGAffineTransform(rotationAngle: radiance)
+    }
+    
+    func burgerButtonAction() {
+        let action = UIAction {_ in
+            self.menuMotion()
+        }
+        burgerButtion.addAction(action, for: .touchUpInside)
+    }
+    
+    func menuMotion() {
+        if self.generalView.frame.origin.x == 0 {
+            self.generalViewForMenu.snp.remakeConstraints { make in
+                make.edges.equalToSuperview()
+            }
+            self.generalView.snp.remakeConstraints { make in
+                make.width.height.equalToSuperview()
+                make.left.equalTo(self.generalViewForMenu.snp.right)
+            }
+
+            UIView.animate(withDuration: 0.3) {
+                self.view.layoutIfNeeded()
+                self.generalView.alpha = 0
+            }
+        } else {
+            self.generalViewForMenu.snp.remakeConstraints { make in
+                make.width.height.equalToSuperview()
+                make.right.equalTo(self.generalView.snp.left)
+            }
+            self.generalView.snp.remakeConstraints { make in
+                make.edges.equalToSuperview()
+            }
+            
+            UIView.animate(withDuration: 0.3) {
+                self.view.layoutIfNeeded()
+                self.generalView.alpha = 1
+            }
+        }
+    }
+    
+    func currentButtonAction(){
+        let action = UIAction {_ in
+            self.presenter.cityRequest()
+            self.menuMotion()
+        }
+        currentButton.addAction(action, for: .touchUpInside)
+    }
+    
+    func findCity() {
+        guard let text = textFieldCityRequest.text else {return}
+        presenter.findCityRequest(city: text)
     }
 
 }

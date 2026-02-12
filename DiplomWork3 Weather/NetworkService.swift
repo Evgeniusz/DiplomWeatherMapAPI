@@ -10,7 +10,7 @@ import SwiftyJSON
 import CoreLocation
 
 protocol iNetworkService {
-    func cityRequest(complition: @escaping (MainParsing) -> Void)
+    func currentCityRequest(complition: @escaping (MainParsing) -> Void)
 }
 
 enum Languages: String {
@@ -38,11 +38,11 @@ final class NetworkService: iNetworkService {
     let siteURL: String = "https://api.openweathermap.org/"
     var coordinatesURL: String { return "?lon=\(coordinates.lon)&lat=\(coordinates.lat)&units=\(units)&exclude=minutely,hourly,daily,alerts"}
     let apiKey: String = "&appid=713aa71dc84d2ca8a2ef48566162"
-    let units: String = "metric ba05"
+    let units: String = "metricba05"
     var lanuage: Languages = .Belarus
     
-    func cityRequest(complition: @escaping (MainParsing) -> Void){
-        sendRequestWithCoordinates(requestType: .GET, endpoints: .baseURLCoordinates , key: apiKey) { data in
+    func currentCityRequest(complition: @escaping (MainParsing) -> Void){
+        sendRequestWithCurrentCoordinates(requestType: .GET, endpoints: .baseURLCoordinates , key: apiKey) { data in
             guard let data else {return}
 //            let json = try? JSON(data: data)  //пока убрал так как решил что свифти не оч подходит тут
             do {
@@ -56,7 +56,7 @@ final class NetworkService: iNetworkService {
         }
     }
     
-    func sendRequestWithCoordinates(requestType: RequestType, endpoints: EndPoints, key: String, complition: @escaping (Data?) -> Void) {
+    func sendRequestWithCurrentCoordinates(requestType: RequestType, endpoints: EndPoints, key: String, complition: @escaping (Data?) -> Void) {
         guard let dataCoordinates = locationManager.currentLocation else {return}
         coordinates = Coordinates(lat: dataCoordinates.latitude, lon: dataCoordinates.longitude)
         guard let URL = URL(string: "\(siteURL)\(endpoints.rawValue)\(coordinatesURL)\(key)") else {return complition (nil)}
@@ -72,12 +72,7 @@ final class NetworkService: iNetworkService {
         } .resume()
     }
     
-//    func coordinatesAdd(complition: @escaping (CLLocationCoordinate2D?) -> Void) {
-//        locationManager.start()
-//        
-//        guard let coordinatesCurrent = locationManager.currentLocation else {return}
-//        complition(coordinatesCurrent)
-//        coordinates = Coordinates(lat: coordinatesCurrent.latitude, lon: coordinatesCurrent.longitude)
-//        print(coordinates)
-//    }
+    func sendRequestWithCityNameByUser(requestType: RequestType, endpoints: EndPoints, key: String, complition: @escaping (Data?) -> Void){
+        
+    }
 }

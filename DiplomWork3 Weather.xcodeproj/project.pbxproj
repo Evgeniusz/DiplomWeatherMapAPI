@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		184C36E32F3B99B400B3030A /* RxCocoa in Frameworks */ = {isa = PBXBuildFile; productRef = 184C36E22F3B99B400B3030A /* RxCocoa */; };
+		184C36E52F3B99B400B3030A /* RxRelay in Frameworks */ = {isa = PBXBuildFile; productRef = 184C36E42F3B99B400B3030A /* RxRelay */; };
+		184C36E72F3B99B400B3030A /* RxSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 184C36E62F3B99B400B3030A /* RxSwift */; };
 		18F690CC2F2A63CF009220F3 /* SwiftyJSON in Frameworks */ = {isa = PBXBuildFile; productRef = 18F690CB2F2A63CF009220F3 /* SwiftyJSON */; };
 		18F690D42F2A63E1009220F3 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 18F690D32F2A63E1009220F3 /* SnapKit */; };
 /* End PBXBuildFile section */
@@ -41,7 +44,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				184C36E32F3B99B400B3030A /* RxCocoa in Frameworks */,
 				18F690CC2F2A63CF009220F3 /* SwiftyJSON in Frameworks */,
+				184C36E72F3B99B400B3030A /* RxSwift in Frameworks */,
+				184C36E52F3B99B400B3030A /* RxRelay in Frameworks */,
 				18F690D42F2A63E1009220F3 /* SnapKit in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -87,6 +93,9 @@
 			packageProductDependencies = (
 				18F690CB2F2A63CF009220F3 /* SwiftyJSON */,
 				18F690D32F2A63E1009220F3 /* SnapKit */,
+				184C36E22F3B99B400B3030A /* RxCocoa */,
+				184C36E42F3B99B400B3030A /* RxRelay */,
+				184C36E62F3B99B400B3030A /* RxSwift */,
 			);
 			productName = "DiplomWork3 Weather";
 			productReference = 18F690B02F2A62DE009220F3 /* DiplomWork3 Weather.app */;
@@ -119,6 +128,7 @@
 			packageReferences = (
 				18F690CA2F2A63CF009220F3 /* XCRemoteSwiftPackageReference "SwiftyJSON" */,
 				18F690D22F2A63E1009220F3 /* XCRemoteSwiftPackageReference "SnapKit" */,
+				184C36E12F3B99B400B3030A /* XCRemoteSwiftPackageReference "RxSwift" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 18F690B12F2A62DE009220F3 /* Products */;
@@ -354,6 +364,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		184C36E12F3B99B400B3030A /* XCRemoteSwiftPackageReference "RxSwift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/ReactiveX/RxSwift.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 6.10.1;
+			};
+		};
 		18F690CA2F2A63CF009220F3 /* XCRemoteSwiftPackageReference "SwiftyJSON" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/SwiftyJSON/SwiftyJSON.git";
@@ -373,6 +391,21 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		184C36E22F3B99B400B3030A /* RxCocoa */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 184C36E12F3B99B400B3030A /* XCRemoteSwiftPackageReference "RxSwift" */;
+			productName = RxCocoa;
+		};
+		184C36E42F3B99B400B3030A /* RxRelay */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 184C36E12F3B99B400B3030A /* XCRemoteSwiftPackageReference "RxSwift" */;
+			productName = RxRelay;
+		};
+		184C36E62F3B99B400B3030A /* RxSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 184C36E12F3B99B400B3030A /* XCRemoteSwiftPackageReference "RxSwift" */;
+			productName = RxSwift;
+		};
 		18F690CB2F2A63CF009220F3 /* SwiftyJSON */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 18F690CA2F2A63CF009220F3 /* XCRemoteSwiftPackageReference "SwiftyJSON" */;
