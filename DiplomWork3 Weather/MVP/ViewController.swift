@@ -13,12 +13,23 @@ import Foundation
 protocol IView {
     func updateView(data: MainParsing)
     func updateWindDirection(radiance: CGFloat)
+    var cityArrayFromBack: [CityNames] {get set}
+    func addTableView()
 }
 
 class ViewController: UIViewController, CLLocationManagerDelegate, IView {
 //    let network: iNetworkService = NetworkService()
     let locationManager = LocationManager.shared
     private let presenter: IPresenter
+    var cityArrayFromBack = [CityNames]()
+    
+    private let tableView: UITableView = {
+        let view = UITableView()
+        view.register(TableViewCity.self, forCellReuseIdentifier: TableViewCity.identifire)
+        view.delegate = self
+        view.dataSource = self
+        return view
+    }()
     
     let bigOffset: CGFloat = 50
     let standartOffset: CGFloat = 16
@@ -362,6 +373,25 @@ class ViewController: UIViewController, CLLocationManagerDelegate, IView {
         guard let text = textFieldCityRequest.text else {return}
         presenter.findCityRequest(city: text)
     }
+    
+    func addTableView() {
+        view.addSubview(tableView)
+        tableView.isHidden = false
+        tableView.snp.makeConstraints { make in
+            make.left.right.equalTo(textFieldCityRequest)
+            make.top.equalTo(textFieldCityRequest.snp.bottom)
+            make.height.equalTo(100) //question need to? its scrolable, auto content?
+        }
+    }
 
 }
 
+extension ViewController: UITableViewDataSource, UITableViewDelegate {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        cityArrayFromBack.count
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        
+    }
+}

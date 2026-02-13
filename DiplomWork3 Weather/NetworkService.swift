@@ -11,6 +11,7 @@ import CoreLocation
 
 protocol iNetworkService {
     func currentCityRequest(complition: @escaping (MainParsing) -> Void)
+    func cityRequest(text: String, complition: @escaping ([CityNames]) -> Void)
 }
 
 enum Languages: String {
@@ -56,6 +57,26 @@ final class NetworkService: iNetworkService {
         }
     }
     
+    func cityRequest(text: String, complition: @escaping ([CityNames]) -> Void){
+        sendRequestWithCityNameByUser(requestType: .GET, endpoints: .baseURlCity, city: text, key: apiKey) { data in
+            guard let data,
+                  let json = try? JSON(data: data),
+                  let array = json.array else {return}
+            
+            var cityArrayResponse = [CityNames]()
+            array.forEach {
+                if let name = $0["name"].string,
+                   let lat = $0["lat"].double,
+                   let lon = $0["lon"].double {
+                    let city = CityNames(name: name, lat: lat, lon: lon)
+                    cityArrayResponse.append(city)
+                }
+                   
+            }
+            complition (cityArrayResponse)
+        }
+    }
+    
     func sendRequestWithCurrentCoordinates(requestType: RequestType, endpoints: EndPoints, key: String, complition: @escaping (Data?) -> Void) {
         guard let dataCoordinates = locationManager.currentLocation else {return}
         coordinates = Coordinates(lat: dataCoordinates.latitude, lon: dataCoordinates.longitude)
@@ -72,7 +93,16 @@ final class NetworkService: iNetworkService {
         } .resume()
     }
     
-    func sendRequestWithCityNameByUser(requestType: RequestType, endpoints: EndPoints, key: String, complition: @escaping (Data?) -> Void){
+    func sendRequestWithCityNameByUser(requestType: RequestType, endpoints: EndPoints, city: String, key: String, complition: @escaping (Data?) -> Void){
+        guard let URL = URL(string:"\(siteURL)\(endpoints.rawValue)\(city)&limit=5\(key)") else {return complition (nil)}
+        var request = URLRequest(url: URL)
+        request.httpMethod = requestType.rawValue
         
+        URLSession.shared.dataTask(with: request) {data, error, response in
+            guard error == error else {
+                return complition (nil)
+            }
+            complition(data)
+        } .resume()
     }
 }

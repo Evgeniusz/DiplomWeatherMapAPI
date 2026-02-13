@@ -43,7 +43,9 @@ final class Presenter: IPresenter {
         //look for city by uipicker
     }
     
-    func findCityRequest(city: String) {
-        
+    func findCityRequest(city: String) {  //что передаем в vc
+        network.cityRequest(text: city) { [weak self] city in
+            self?.view?.cityArrayFromBack = city
+        }
     }
 }
