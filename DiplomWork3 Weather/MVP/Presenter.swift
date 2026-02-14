@@ -10,6 +10,7 @@ import Foundation
 protocol IPresenter {
     func cityRequest()
     func findCityRequest(city: String)
+    func cityRequestFromTableViewByCoordinates(coordinates: Coordinates)
 }
 
 final class Presenter: IPresenter {
@@ -48,4 +49,12 @@ final class Presenter: IPresenter {
             self?.view?.cityArrayFromBack = city
         }
     }
+    
+    func cityRequestFromTableViewByCoordinates(coordinates: Coordinates){
+        network.coordinatesCityRequest(coordinates: coordinates) { [weak self] data in
+            self?.view?.updateView(data: data)
+            self?.windDirectionRadians(direction: data.current?.windDegrees ?? 0)
+        }
+    }
+    
 }

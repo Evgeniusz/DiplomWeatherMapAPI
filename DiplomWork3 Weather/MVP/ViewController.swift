@@ -23,7 +23,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, IView {
     private let presenter: IPresenter
     var cityArrayFromBack = [CityNames]()
     
-    private let tableView: UITableView = {
+    private lazy var tableView: UITableView = {
         let view = UITableView()
         view.register(TableViewCity.self, forCellReuseIdentifier: TableViewCity.identifire)
         view.delegate = self
@@ -53,6 +53,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, IView {
         textField.layer.borderColor = UIColor.white.cgColor
         textField.textAlignment = .center
         textField.font = .systemFont(ofSize: 25, weight: .thin)
+        textField.autocorrectionType = .no
         return textField
     }()
     
@@ -168,6 +169,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, IView {
         burgerButtonAction()
         currentButtonAction()
         start()
+        textFieldCityRequest.delegate = self
     }
     
     override func viewDidLayoutSubviews() {
@@ -392,6 +394,36 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: TableViewCity.identifire, for: indexPath) as? TableViewCity else {return UITableViewCell()}
+        cell.configure(object: cityArrayFromBack[indexPath.row])
+        return cell
+    }
+    
+    func tableView(_ tableView: UITableView, canPerformPrimaryActionForRowAt indexPath: IndexPath) -> Bool {
+        return true
+    }
+    
+    func tableView(_ tableView: UITableView, performPrimaryActionForRowAt indexPath: IndexPath) {
+        // прописать сохранение передачу кнопки, запрос на вывод города, переход на экран
+        let object = cityArrayFromBack[indexPath.row]
+        let newCoordinates = Coordinates(lat: object.lat, lon: object.lon)
+        presenter.cityRequestFromTableViewByCoordinates(coordinates: newCoordinates)
+        tableView.removeFromSuperview()
+        menuMotion()
+    }
+}
+
+extension ViewController: UITextFieldDelegate {
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        findCity()
+        return true
+    }
+    
+    func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {
+        return true
+    }
+    
+    func textFieldDidEndEditing(_ textField: UITextField){
         
     }
 }

@@ -11,6 +11,7 @@ import CoreLocation
 
 protocol iNetworkService {
     func currentCityRequest(complition: @escaping (MainParsing) -> Void)
+    func coordinatesCityRequest(coordinates: Coordinates, complition: @escaping (MainParsing) -> Void)
     func cityRequest(text: String, complition: @escaping ([CityNames]) -> Void)
 }
 
@@ -38,14 +39,15 @@ final class NetworkService: iNetworkService {
     var coordinates = Coordinates(lat: 51.5073219, lon: -0.1276474)
     let siteURL: String = "https://api.openweathermap.org/"
     var coordinatesURL: String { return "?lon=\(coordinates.lon)&lat=\(coordinates.lat)&units=\(units)&exclude=minutely,hourly,daily,alerts"}
-    let apiKey: String = "&appid=713aa71dc84d2ca8a2ef48566162"
-    let units: String = "metricba05"
+    let apiKey: String = "&appid=713aa71dc84d2ca8a2ef48566162ba05"
+    let units: String = "metric"
     var lanuage: Languages = .Belarus
     
+    
+    //MARK: Request to API - current location by LocationManager
     func currentCityRequest(complition: @escaping (MainParsing) -> Void){
         sendRequestWithCurrentCoordinates(requestType: .GET, endpoints: .baseURLCoordinates , key: apiKey) { data in
             guard let data else {return}
-//            let json = try? JSON(data: data)  //пока убрал так как решил что свифти не оч подходит тут
             do {
                 let parcing = try JSONDecoder().decode(MainParsing.self, from: data)
                 DispatchQueue.main.async {
@@ -55,6 +57,37 @@ final class NetworkService: iNetworkService {
                 
             }
         }
+    }
+    
+    func sendRequestWithCurrentCoordinates(requestType: RequestType, endpoints: EndPoints, key: String, complition: @escaping (Data?) -> Void) {
+        guard let dataCoordinates = locationManager.currentLocation else {return}
+        coordinates = Coordinates(lat: dataCoordinates.latitude, lon: dataCoordinates.longitude)
+        guard let URL = URL(string: "\(siteURL)\(endpoints.rawValue)\(coordinatesURL)\(key)") else {return complition (nil)}
+        print (URL)
+        var request = URLRequest(url: URL)
+        request.httpMethod = requestType.rawValue
+        
+        URLSession.shared.dataTask(with: request) { data, error, response in
+            guard error == error else {return
+                complition (nil)
+            }
+            complition(data)
+        } .resume()
+    }
+    
+    //MARK: Request to API - search by name
+    func sendRequestWithCityNameByUser(requestType: RequestType, endpoints: EndPoints, city: String, key: String, complition: @escaping (Data?) -> Void){
+        guard let URL = URL(string:"\(siteURL)\(endpoints.rawValue)\(city)&limit=5\(key)") else {return complition (nil)}
+        print(URL)
+        var request = URLRequest(url: URL)
+        request.httpMethod = requestType.rawValue
+        
+        URLSession.shared.dataTask(with: request) {data, error, response in
+            guard error == error else {
+                return complition (nil)
+            }
+            complition(data)
+        } .resume()
     }
     
     func cityRequest(text: String, complition: @escaping ([CityNames]) -> Void){
@@ -77,9 +110,9 @@ final class NetworkService: iNetworkService {
         }
     }
     
-    func sendRequestWithCurrentCoordinates(requestType: RequestType, endpoints: EndPoints, key: String, complition: @escaping (Data?) -> Void) {
-        guard let dataCoordinates = locationManager.currentLocation else {return}
-        coordinates = Coordinates(lat: dataCoordinates.latitude, lon: dataCoordinates.longitude)
+    //MARK: Request to API - search by coordinates - response by city Name
+    func coordinatesRequest(requestType: RequestType, endpoints: EndPoints, key: String, coordinatesFrom: Coordinates, complition: @escaping (Data?) -> Void) {
+        coordinates = Coordinates(lat: coordinatesFrom.lat, lon: coordinatesFrom.lon)
         guard let URL = URL(string: "\(siteURL)\(endpoints.rawValue)\(coordinatesURL)\(key)") else {return complition (nil)}
         print (URL)
         var request = URLRequest(url: URL)
@@ -93,16 +126,17 @@ final class NetworkService: iNetworkService {
         } .resume()
     }
     
-    func sendRequestWithCityNameByUser(requestType: RequestType, endpoints: EndPoints, city: String, key: String, complition: @escaping (Data?) -> Void){
-        guard let URL = URL(string:"\(siteURL)\(endpoints.rawValue)\(city)&limit=5\(key)") else {return complition (nil)}
-        var request = URLRequest(url: URL)
-        request.httpMethod = requestType.rawValue
-        
-        URLSession.shared.dataTask(with: request) {data, error, response in
-            guard error == error else {
-                return complition (nil)
+    func coordinatesCityRequest(coordinates: Coordinates, complition: @escaping (MainParsing) -> Void){
+        coordinatesRequest(requestType: .GET, endpoints: .baseURLCoordinates , key: apiKey, coordinatesFrom: coordinates) { data in
+            guard let data else {return}
+            do {
+                let parcing = try JSONDecoder().decode(MainParsing.self, from: data)
+                DispatchQueue.main.async {
+                    complition(parcing)
+                }
+            } catch {
+                
             }
-            complition(data)
-        } .resume()
+        }
     }
 }
