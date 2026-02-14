@@ -39,8 +39,8 @@ final class NetworkService: iNetworkService {
     var coordinates = Coordinates(lat: 51.5073219, lon: -0.1276474)
     let siteURL: String = "https://api.openweathermap.org/"
     var coordinatesURL: String { return "?lon=\(coordinates.lon)&lat=\(coordinates.lat)&units=\(units)&exclude=minutely,hourly,daily,alerts"}
-    let apiKey: String = "&appid=713aa71dc84d2ca8a2ef48566162ba05"
-    let units: String = "metric"
+    let apiKey: String = "&appid=713aa71dc84d2ca8a2ef48566162"
+    let units: String = "metricba05"
     var lanuage: Languages = .Belarus
     
     
@@ -100,8 +100,10 @@ final class NetworkService: iNetworkService {
             array.forEach {
                 if let name = $0["name"].string,
                    let lat = $0["lat"].double,
-                   let lon = $0["lon"].double {
-                    let city = CityNames(name: name, lat: lat, lon: lon)
+                   let lon = $0["lon"].double,
+                   let country = $0["country"].string
+                {
+                    let city = CityNames(name: name, lat: lat, lon: lon, country: country)
                     cityArrayResponse.append(city)
                 }
                    

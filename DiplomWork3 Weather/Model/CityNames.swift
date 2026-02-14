@@ -9,10 +9,12 @@ final class CityNames {
     let name: String
     let lat: Double
     let lon: Double
+    let country: String
     
-    init(name: String, lat: Double, lon: Double) {
+    init(name: String, lat: Double, lon: Double, country: String) {
         self.name = name
         self.lat = lat
         self.lon = lon
+        self.country = country
     }
 }

@@ -17,7 +17,7 @@ final class TableViewCity: UITableViewCell {
         label.numberOfLines = 0
         label.textColor = .white
         label.backgroundColor = .systemBlue
-        label.font = .systemFont(ofSize: 25)
+        label.font = .systemFont(ofSize: 25, weight: .thin)
         return label
     }()
     
@@ -35,11 +35,12 @@ final class TableViewCity: UITableViewCell {
         cityName.snp.makeConstraints { make in
             make.left.right.equalToSuperview()
             make.top.equalToSuperview().offset(2)
+            make.bottom.equalToSuperview().offset(-2)
         }
     }
     
     func configure(object: CityNames){
-        cityName.text = object.name
+        cityName.text = object.name + "/" + object.country
     }
     
     override func prepareForReuse() {

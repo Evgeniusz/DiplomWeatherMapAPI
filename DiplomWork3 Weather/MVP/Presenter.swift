@@ -46,7 +46,12 @@ final class Presenter: IPresenter {
     
     func findCityRequest(city: String) {  //что передаем в vc
         network.cityRequest(text: city) { [weak self] city in
-            self?.view?.cityArrayFromBack = city
+            DispatchQueue.main.async {
+                self?.view?.cityArrayFromBack = city
+                self?.view?.addTableView()
+                self?.view?.tableView.reloadData()
+            }
+                                    // MABY HEREEEEE?)
         }
     }
     

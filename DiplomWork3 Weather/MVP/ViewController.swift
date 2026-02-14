@@ -15,6 +15,7 @@ protocol IView {
     func updateWindDirection(radiance: CGFloat)
     var cityArrayFromBack: [CityNames] {get set}
     func addTableView()
+    var tableView: UITableView {get set}
 }
 
 class ViewController: UIViewController, CLLocationManagerDelegate, IView {
@@ -23,7 +24,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, IView {
     private let presenter: IPresenter
     var cityArrayFromBack = [CityNames]()
     
-    private lazy var tableView: UITableView = {
+    lazy var tableView: UITableView = {
         let view = UITableView()
         view.register(TableViewCity.self, forCellReuseIdentifier: TableViewCity.identifire)
         view.delegate = self
@@ -314,11 +315,15 @@ class ViewController: UIViewController, CLLocationManagerDelegate, IView {
     
     func viewColorChange(temp: Double){
         if temp > 0 {
+            generalView.backgroundColor = .systemOrange
             view.backgroundColor = .systemOrange
             windDirection.image = .WDH
+            tableView.backgroundColor = view.backgroundColor
         } else {
-            view.backgroundColor = .systemBlue
+            generalView.backgroundColor = .systemBlue
             windDirection.image = .WD
+            view.backgroundColor = .systemBlue
+            tableView.backgroundColor = view.backgroundColor
         }
     }
     
@@ -409,6 +414,8 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
         let newCoordinates = Coordinates(lat: object.lat, lon: object.lon)
         presenter.cityRequestFromTableViewByCoordinates(coordinates: newCoordinates)
         tableView.removeFromSuperview()
+        cityArrayFromBack.removeAll()
+        textFieldCityRequest.text = ""
         menuMotion()
     }
 }
@@ -420,7 +427,7 @@ extension ViewController: UITextFieldDelegate {
     }
     
     func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {
-        return true
+                return true
     }
     
     func textFieldDidEndEditing(_ textField: UITextField){
