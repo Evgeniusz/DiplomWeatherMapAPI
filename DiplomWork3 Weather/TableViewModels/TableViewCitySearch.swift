@@ -15,8 +15,8 @@ final class TableViewCity: UITableViewCell {
         let label = UILabel()
         label.textAlignment = .center
         label.numberOfLines = 0
-        label.textColor = .white
-        label.backgroundColor = .systemBlue
+        label.textColor = .black
+        label.backgroundColor = .white
         label.font = .systemFont(ofSize: 25, weight: .thin)
         return label
     }()

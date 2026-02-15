@@ -11,11 +11,12 @@ protocol IPresenter {
     func cityRequest()
     func findCityRequest(city: String)
     func cityRequestFromTableViewByCoordinates(coordinates: Coordinates)
+    func addObjectCityTiArray(object: CityNames)
 }
 
 final class Presenter: IPresenter {
     let network: iNetworkService = NetworkService()
-    var array: [Buttons]=[]
+    var arrayCities: [CityNames]=[]
     var view: IView?
     
     func cityRequest() {
@@ -30,18 +31,12 @@ final class Presenter: IPresenter {
         view?.updateWindDirection(radiance: radians)
     }
     
-    func addButtonArray(button: UIButton, coordinates: Coordinates) {
-        guard let title = button.currentTitle else {return}
-        let color = button.currentTitleColor
-        let button = Buttons(title: title, color: color, lon: coordinates.lon, lat: coordinates.lat)
-        array.append(button)
-    }
-    
-    func createButton(){
-        //идея тут берем из текстфилда текст, добавляем в запрос - сделать запрос по имени, и возвращаем парсенные названия
-        //потом выбранные передаем в массив и обновляем тейбл вью
-        //under cuurentGeo made tableView and only after - made text field to city finder
-        //look for city by uipicker
+    func addObjectCityTiArray(object: CityNames){
+        arrayCities.append(object)
+        DispatchQueue.main.async {
+            self.view?.cityArraySearchBefore = self.arrayCities
+            self.view?.tableViewCitySeenBefore.reloadData()
+        }
     }
     
     func findCityRequest(city: String) {  //что передаем в vc
@@ -49,7 +44,7 @@ final class Presenter: IPresenter {
             DispatchQueue.main.async {
                 self?.view?.cityArrayFromBack = city
                 self?.view?.addTableView()
-                self?.view?.tableView.reloadData()
+                self?.view?.tableViewSearch.reloadData()
             }
                                     // MABY HEREEEEE?)
         }

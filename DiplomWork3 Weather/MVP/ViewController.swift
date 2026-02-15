@@ -15,7 +15,9 @@ protocol IView {
     func updateWindDirection(radiance: CGFloat)
     var cityArrayFromBack: [CityNames] {get set}
     func addTableView()
-    var tableView: UITableView {get set}
+    var tableViewSearch: UITableView {get set}
+    var cityArraySearchBefore: [CityNames] {get set}
+    var tableViewCitySeenBefore: UITableView {get set}
 }
 
 class ViewController: UIViewController, CLLocationManagerDelegate, IView {
@@ -23,12 +25,22 @@ class ViewController: UIViewController, CLLocationManagerDelegate, IView {
     let locationManager = LocationManager.shared
     private let presenter: IPresenter
     var cityArrayFromBack = [CityNames]()
+    var cityArraySearchBefore = [CityNames]()
     
-    lazy var tableView: UITableView = {
+    lazy var tableViewSearch: UITableView = {
         let view = UITableView()
         view.register(TableViewCity.self, forCellReuseIdentifier: TableViewCity.identifire)
         view.delegate = self
         view.dataSource = self
+        return view
+    }()
+    
+    lazy var tableViewCitySeenBefore: UITableView = {
+        let view = UITableView()
+        view.register(TableViewCityFoundList.self, forCellReuseIdentifier: TableViewCityFoundList.identifire)
+        view.delegate = self
+        view.dataSource = self
+        view.backgroundColor = .clear
         return view
     }()
     
@@ -171,6 +183,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, IView {
         currentButtonAction()
         start()
         textFieldCityRequest.delegate = self
+        buttonFindCityAction()
     }
     
     override func viewDidLayoutSubviews() {
@@ -200,6 +213,9 @@ class ViewController: UIViewController, CLLocationManagerDelegate, IView {
         generalViewForMenu.addSubview(currentButton)
         generalViewForMenu.addSubview(buttonFindForTextField)
         generalViewForMenu.addSubview(textFieldCityRequest)
+        
+        generalViewForMenu.addSubview(tableViewCitySeenBefore)
+        
     }
     
     func allConstraints(){
@@ -290,6 +306,13 @@ class ViewController: UIViewController, CLLocationManagerDelegate, IView {
             make.top.bottom.equalTo(buttonFindForTextField)
         }
         
+        tableViewCitySeenBefore.snp.makeConstraints { make in
+            make.left.right.equalTo(textFieldCityRequest)
+            make.top.equalTo(textFieldCityRequest.snp.bottom)
+            make.height.equalTo(generalView.snp.height).dividedBy(1.3)
+        }
+        
+        
         
     }
     
@@ -318,12 +341,12 @@ class ViewController: UIViewController, CLLocationManagerDelegate, IView {
             generalView.backgroundColor = .systemOrange
             view.backgroundColor = .systemOrange
             windDirection.image = .WDH
-            tableView.backgroundColor = view.backgroundColor
+            tableViewSearch.backgroundColor = view.backgroundColor
         } else {
             generalView.backgroundColor = .systemBlue
             windDirection.image = .WD
             view.backgroundColor = .systemBlue
-            tableView.backgroundColor = view.backgroundColor
+            tableViewSearch.backgroundColor = view.backgroundColor
         }
     }
     
@@ -347,7 +370,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, IView {
                 make.width.height.equalToSuperview()
                 make.left.equalTo(self.generalViewForMenu.snp.right)
             }
-
+            print(cityArraySearchBefore.count)
             UIView.animate(withDuration: 0.3) {
                 self.view.layoutIfNeeded()
                 self.generalView.alpha = 0
@@ -376,32 +399,65 @@ class ViewController: UIViewController, CLLocationManagerDelegate, IView {
         currentButton.addAction(action, for: .touchUpInside)
     }
     
+    func buttonFindCityAction(){
+        let action = UIAction{ _ in
+            self.findCity()
+            self.textFieldCityRequest.endEditing(true)
+        }
+        buttonFindForTextField.addAction(action, for: .touchUpInside)
+    }
+    
     func findCity() {
         guard let text = textFieldCityRequest.text else {return}
         presenter.findCityRequest(city: text)
     }
     
     func addTableView() {
-        view.addSubview(tableView)
-        tableView.isHidden = false
-        tableView.snp.makeConstraints { make in
+        view.addSubview(tableViewSearch)
+        tableViewSearch.isHidden = false
+        tableViewSearch.snp.makeConstraints { make in
             make.left.right.equalTo(textFieldCityRequest)
             make.top.equalTo(textFieldCityRequest.snp.bottom)
             make.height.equalTo(100) //question need to? its scrolable, auto content?
         }
     }
+    
+//    func notificationCenter(){
+//        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
+//        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
+//    }
+//    
+//    @objc func keyboardWillShow (_ notificator: Notification) {
+//        
+//    }
+//    
+//    @objc func keyboardWillHide(_ notificator: Notification){
+//        
+//    }
 
 }
 
 extension ViewController: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        cityArrayFromBack.count
+        if tableView == tableViewSearch {
+            return cityArrayFromBack.count
+        } else if tableView == tableViewCitySeenBefore{
+            return cityArraySearchBefore.count
+        }
+        return 0
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: TableViewCity.identifire, for: indexPath) as? TableViewCity else {return UITableViewCell()}
-        cell.configure(object: cityArrayFromBack[indexPath.row])
-        return cell
+        if tableView == tableViewSearch {
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: TableViewCity.identifire, for: indexPath) as? TableViewCity else {return UITableViewCell()}
+            cell.configure(object: cityArrayFromBack[indexPath.row])
+            return cell
+        } else if tableView == tableViewCitySeenBefore {
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: TableViewCityFoundList.identifire, for: indexPath) as? TableViewCityFoundList else {return UITableViewCell()}
+            cell.configure(object: cityArraySearchBefore[indexPath.row])
+            return cell
+        }
+        return UITableViewCell()
     }
     
     func tableView(_ tableView: UITableView, canPerformPrimaryActionForRowAt indexPath: IndexPath) -> Bool {
@@ -410,19 +466,28 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, performPrimaryActionForRowAt indexPath: IndexPath) {
         // прописать сохранение передачу кнопки, запрос на вывод города, переход на экран
-        let object = cityArrayFromBack[indexPath.row]
-        let newCoordinates = Coordinates(lat: object.lat, lon: object.lon)
-        presenter.cityRequestFromTableViewByCoordinates(coordinates: newCoordinates)
-        tableView.removeFromSuperview()
-        cityArrayFromBack.removeAll()
-        textFieldCityRequest.text = ""
-        menuMotion()
+        if tableView == tableViewSearch {
+            let object = cityArrayFromBack[indexPath.row]
+            presenter.addObjectCityTiArray(object: object)
+            let newCoordinates = Coordinates(lat: object.lat, lon: object.lon)
+            presenter.cityRequestFromTableViewByCoordinates(coordinates: newCoordinates)
+            tableView.removeFromSuperview()
+            cityArrayFromBack.removeAll()
+            textFieldCityRequest.text = ""
+            menuMotion()
+        } else if tableView == tableViewCitySeenBefore {
+            let object = cityArraySearchBefore[indexPath.row]
+            let newCoordinates = Coordinates(lat: object.lat, lon: object.lon)
+            presenter.cityRequestFromTableViewByCoordinates(coordinates: newCoordinates)
+            menuMotion()
+        }
     }
 }
 
 extension ViewController: UITextFieldDelegate {
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         findCity()
+        textField.endEditing(true)
         return true
     }
     
