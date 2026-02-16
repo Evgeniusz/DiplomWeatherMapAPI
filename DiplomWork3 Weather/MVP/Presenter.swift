@@ -11,13 +11,16 @@ protocol IPresenter {
     func cityRequest()
     func findCityRequest(city: String)
     func cityRequestFromTableViewByCoordinates(coordinates: Coordinates)
+    func cityRequestFromTableViewByCoordinatesAndName(coordinates: Coordinates, name: String)
     func addObjectCityTiArray(object: CityNames)
+    func loadData()
 }
 
 final class Presenter: IPresenter {
     let network: iNetworkService = NetworkService()
     var arrayCities: [CityNames]=[]
     var view: IView?
+    let saver = SaveLoadManager()
     
     func cityRequest() {
         network.currentCityRequest { [weak self] data in
@@ -33,6 +36,7 @@ final class Presenter: IPresenter {
     
     func addObjectCityTiArray(object: CityNames){
         arrayCities.append(object)
+        saver.saveArrayCity(arrayCities)
         DispatchQueue.main.async {
             self.view?.cityArraySearchBefore = self.arrayCities
             self.view?.tableViewCitySeenBefore.reloadData()
@@ -49,11 +53,27 @@ final class Presenter: IPresenter {
                                     // MABY HEREEEEE?)
         }
     }
-    
+    //MARK: HERE NEED TO CHECK
     func cityRequestFromTableViewByCoordinates(coordinates: Coordinates){
         network.coordinatesCityRequest(coordinates: coordinates) { [weak self] data in
             self?.view?.updateView(data: data)
             self?.windDirectionRadians(direction: data.current?.windDegrees ?? 0)
+        }
+    }
+    
+    func cityRequestFromTableViewByCoordinatesAndName(coordinates: Coordinates, name: String){
+        network.coordinatesCityRequest(coordinates: coordinates) { [weak self] data in
+            self?.view?.updateViewCoordinates(data: data, name: name)
+            self?.windDirectionRadians(direction: data.current?.windDegrees ?? 0)
+        }
+    }
+    
+    func loadData(){
+        if arrayCities.isEmpty == true {
+            guard let array = saver.loadArrayCity() else {return}
+            arrayCities = array
+            view?.cityArraySearchBefore = arrayCities
+            view?.tableViewCitySeenBefore.reloadData()
         }
     }
     

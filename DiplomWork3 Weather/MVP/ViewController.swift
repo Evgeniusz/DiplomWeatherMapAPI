@@ -18,6 +18,7 @@ protocol IView {
     var tableViewSearch: UITableView {get set}
     var cityArraySearchBefore: [CityNames] {get set}
     var tableViewCitySeenBefore: UITableView {get set}
+    func updateViewCoordinates(data: MainParsing, name: String)
 }
 
 class ViewController: UIViewController, CLLocationManagerDelegate, IView {
@@ -184,6 +185,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, IView {
         start()
         textFieldCityRequest.delegate = self
         buttonFindCityAction()
+        presenter.loadData()
     }
     
     override func viewDidLayoutSubviews() {
@@ -330,10 +332,22 @@ class ViewController: UIViewController, CLLocationManagerDelegate, IView {
         guard let fellsText = data.current?.feelsLike else {return}
         feelsLikeLabel.text = "Fells like " + "\(Int(fellsText.rounded())) °С"
         viewColorChange(temp: temp)
-       
-        
-        
 //        imageWeather.image = UIImage(named: data.current?.weather)
+    }
+    
+    func updateViewCoordinates(data: MainParsing, name: String) {
+        
+        
+        labelCity.text = name
+        guard let icon = data.current?.weather?[0].icon else {return}
+        imageWeather.image = UIImage(named: icon)
+        guard let temp = data.current?.temp else {return}
+        tempLabel.text = "\(Int(temp.rounded()))"
+        guard let wind = data.current?.windSpeed else {return}
+        windLabel.text = "\(wind)"+" m/s"
+        guard let fellsText = data.current?.feelsLike else {return}
+        feelsLikeLabel.text = "Fells like " + "\(Int(fellsText.rounded())) °С"
+        viewColorChange(temp: temp)
     }
     
     func viewColorChange(temp: Double){
@@ -478,7 +492,7 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
         } else if tableView == tableViewCitySeenBefore {
             let object = cityArraySearchBefore[indexPath.row]
             let newCoordinates = Coordinates(lat: object.lat, lon: object.lon)
-            presenter.cityRequestFromTableViewByCoordinates(coordinates: newCoordinates)
+            presenter.cityRequestFromTableViewByCoordinatesAndName(coordinates: newCoordinates, name: object.name)
             menuMotion()
         }
     }

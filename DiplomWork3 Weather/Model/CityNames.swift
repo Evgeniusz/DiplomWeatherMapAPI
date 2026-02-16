@@ -5,7 +5,7 @@
 //  Created by Apple on 13.02.26.
 //
 
-final class CityNames {
+final class CityNames: Codable {
     let name: String
     let lat: Double
     let lon: Double
