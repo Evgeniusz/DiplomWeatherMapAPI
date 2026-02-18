@@ -40,7 +40,7 @@ final class TableViewCity: UITableViewCell {
     }
     
     func configure(object: CityNames){
-        cityName.text = object.name + "/" + object.country
+        cityName.text = object.localNames + " / " + object.country
     }
     
     override func prepareForReuse() {

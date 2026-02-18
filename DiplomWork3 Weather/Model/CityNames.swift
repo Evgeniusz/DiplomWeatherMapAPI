@@ -10,11 +10,13 @@ final class CityNames: Codable {
     let lat: Double
     let lon: Double
     let country: String
+    let localNames: String
     
-    init(name: String, lat: Double, lon: Double, country: String) {
+    init(name: String, lat: Double, lon: Double, country: String, localNames: String) {
         self.name = name
         self.lat = lat
         self.lon = lon
         self.country = country
+        self.localNames = localNames
     }
 }

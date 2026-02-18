@@ -1,0 +1,13 @@
+/* 
+  Localizable.strings
+  DiplomWork3 Weather
+
+  Created by Apple on 18.02.26.
+  
+*/
+"Fells like " = "体感温度 ";
+" m/s" = " m/s";
+"compass" = "コンパス";
+"No data, check for e connection" = "データがありません、接続を確認してください";
+"Find City" = "都市を検索";
+"Current Geo Location" = "現在地";

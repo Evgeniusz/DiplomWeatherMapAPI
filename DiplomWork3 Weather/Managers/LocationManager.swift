@@ -12,6 +12,7 @@ import CoreLocation
 final class LocationManager: NSObject {
     static let shared = LocationManager()
     
+   
     private let locationManager = CLLocationManager()
     var currentLocation: CLLocationCoordinate2D?
     
@@ -23,6 +24,18 @@ final class LocationManager: NSObject {
         locationManager.startUpdatingLocation()
     }
     
+    func geoCoding(lat: CLLocationDegrees, lon: CLLocationDegrees) async -> String {
+        let geoCoder = CLGeocoder()
+        let location = CLLocation(latitude: lat, longitude: lon)
+        do {
+            guard let cityName = try await geoCoder.reverseGeocodeLocation(location).first?.locality else {return "NoCity"}
+            return cityName
+        }
+        catch {
+            let error = "\(error.localizedDescription)"
+            return error
+        }
+    }
 }
 
 extension LocationManager: CLLocationManagerDelegate {

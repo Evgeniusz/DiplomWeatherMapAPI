@@ -59,7 +59,7 @@ final class NetworkService: iNetworkService {
         }
     }
     
-    func sendRequestWithCurrentCoordinates(requestType: RequestType, endpoints: EndPoints, key: String, complition: @escaping (Data?) -> Void) {
+    func sendRequestWithCurrentCoordinates(requestType: RequestType, endpoints: EndPoints, key: String, complition: @escaping (Data?) -> Void) { //here two
         guard let dataCoordinates = locationManager.currentLocation else {return}
         coordinates = Coordinates(lat: dataCoordinates.latitude, lon: dataCoordinates.longitude)
         guard let URL = URL(string: "\(siteURL)\(endpoints.rawValue)\(coordinatesURL)\(key)") else {return complition (nil)}
@@ -90,6 +90,30 @@ final class NetworkService: iNetworkService {
         } .resume()
     }
     
+//    func cityRequest(text: String, complition: @escaping ([CityNames]) -> Void){
+//        sendRequestWithCityNameByUser(requestType: .GET, endpoints: .baseURlCity, city: text, key: apiKey) { data in
+//            guard let data,
+//                  let json = try? JSON(data: data),
+//                  let array = json.array else {return}
+//            
+//            var cityArrayResponse = [CityNames]()
+//            array.forEach {
+//                if let name = $0["name"].string,
+//                   let lat = $0["lat"].double,
+//                   let lon = $0["lon"].double,
+//                   let country = $0["country"].string
+//                {
+//                    let city = CityNames(name: name, lat: lat, lon: lon, country: country)
+//                    cityArrayResponse.append(city)
+//                }
+//                   
+//            }
+//            complition (cityArrayResponse)
+//        }
+//    }
+    
+    //MARK: Test block of code 2
+    
     func cityRequest(text: String, complition: @escaping ([CityNames]) -> Void){
         sendRequestWithCityNameByUser(requestType: .GET, endpoints: .baseURlCity, city: text, key: apiKey) { data in
             guard let data,
@@ -98,12 +122,14 @@ final class NetworkService: iNetworkService {
             
             var cityArrayResponse = [CityNames]()
             array.forEach {
+                guard let curentLanguage = Locale.current.language.languageCode?.identifier else {return}
                 if let name = $0["name"].string,
                    let lat = $0["lat"].double,
                    let lon = $0["lon"].double,
-                   let country = $0["country"].string
+                   let country = $0["country"].string,
+                   let localName = $0["local_names"].dictionaryValue[curentLanguage]?.string
                 {
-                    let city = CityNames(name: name, lat: lat, lon: lon, country: country)
+                    let city = CityNames(name: name, lat: lat, lon: lon, country: country, localNames: localName)
                     cityArrayResponse.append(city)
                 }
                    
@@ -126,6 +152,11 @@ final class NetworkService: iNetworkService {
             }
             complition(data)
         } .resume()
+    }
+    
+    func someAsyncFunction() async { //???????????????????? HOW
+        let city = await locationManager.geoCoding(lat: coordinates.lat, lon: coordinates.lon)
+        
     }
     
     func coordinatesCityRequest(coordinates: Coordinates, complition: @escaping (MainParsing) -> Void){

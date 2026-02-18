@@ -52,7 +52,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, IView {
     
     private let currentButton: UIButton = {
         let button = UIButton(type: .system)
-        button.setTitle("Current Geo Location", for: .normal)
+        button.setTitle("Current Geo Location".localized, for: .normal)
         button.contentHorizontalAlignment = .center
         button.setTitleColor(.white, for: .normal)
         button.titleLabel?.font = .systemFont(ofSize: 25, weight: .thin)
@@ -61,7 +61,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, IView {
     
     private let textFieldCityRequest: UITextField = {
         let textField = UITextField()
-        textField.placeholder = "Find City"
+        textField.placeholder = "Find City".localized
         textField.textColor = .white
         textField.layer.borderWidth = 1
         textField.layer.borderColor = UIColor.white.cgColor
@@ -150,13 +150,13 @@ class ViewController: UIViewController, CLLocationManagerDelegate, IView {
         label.textColor = .white
         label.textAlignment = .center
         label.font = .systemFont(ofSize: 20, weight: .light)
-        label.text = "No data, check for e connection"
+        label.text = "No data, check for e connection".localized
         return label
     }()
     
     private let windDirectionView: UIImageView = {
         let view = UIImageView()
-        view.image = UIImage(named: "compass")
+        view.image = UIImage(named: "compass".localized)
         return view
     }()
     
@@ -314,8 +314,6 @@ class ViewController: UIViewController, CLLocationManagerDelegate, IView {
             make.height.equalTo(generalView.snp.height).dividedBy(1.3)
         }
         
-        
-        
     }
     
     func updateView(data: MainParsing) {
@@ -328,11 +326,10 @@ class ViewController: UIViewController, CLLocationManagerDelegate, IView {
         guard let temp = data.current?.temp else {return}
         tempLabel.text = "\(Int(temp.rounded()))"
         guard let wind = data.current?.windSpeed else {return}
-        windLabel.text = "\(wind)"+" m/s"
+        windLabel.text = "\(wind)"+" m/s".localized
         guard let fellsText = data.current?.feelsLike else {return}
-        feelsLikeLabel.text = "Fells like " + "\(Int(fellsText.rounded())) °С"
+        feelsLikeLabel.text = "Fells like ".localized + "\(Int(fellsText.rounded())) °С"
         viewColorChange(temp: temp)
-//        imageWeather.image = UIImage(named: data.current?.weather)
     }
     
     func updateViewCoordinates(data: MainParsing, name: String) {
@@ -344,9 +341,9 @@ class ViewController: UIViewController, CLLocationManagerDelegate, IView {
         guard let temp = data.current?.temp else {return}
         tempLabel.text = "\(Int(temp.rounded()))"
         guard let wind = data.current?.windSpeed else {return}
-        windLabel.text = "\(wind)"+" m/s"
+        windLabel.text = "\(wind)"+" m/s".localized
         guard let fellsText = data.current?.feelsLike else {return}
-        feelsLikeLabel.text = "Fells like " + "\(Int(fellsText.rounded())) °С"
+        feelsLikeLabel.text = "Fells like ".localized + "\(Int(fellsText.rounded())) °С"
         viewColorChange(temp: temp)
     }
     
@@ -479,12 +476,11 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, performPrimaryActionForRowAt indexPath: IndexPath) {
-        // прописать сохранение передачу кнопки, запрос на вывод города, переход на экран
         if tableView == tableViewSearch {
             let object = cityArrayFromBack[indexPath.row]
             presenter.addObjectCityTiArray(object: object)
             let newCoordinates = Coordinates(lat: object.lat, lon: object.lon)
-            presenter.cityRequestFromTableViewByCoordinates(coordinates: newCoordinates)
+            presenter.cityRequestFromTableViewByCoordinatesAndName(coordinates: newCoordinates, name: object.localNames)
             tableView.removeFromSuperview()
             cityArrayFromBack.removeAll()
             textFieldCityRequest.text = ""
@@ -492,7 +488,7 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
         } else if tableView == tableViewCitySeenBefore {
             let object = cityArraySearchBefore[indexPath.row]
             let newCoordinates = Coordinates(lat: object.lat, lon: object.lon)
-            presenter.cityRequestFromTableViewByCoordinatesAndName(coordinates: newCoordinates, name: object.name)
+            presenter.cityRequestFromTableViewByCoordinatesAndName(coordinates: newCoordinates, name: object.localNames)
             menuMotion()
         }
     }
