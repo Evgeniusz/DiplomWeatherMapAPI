@@ -14,13 +14,18 @@ protocol IPresenter {
     func cityRequestFromTableViewByCoordinatesAndName(coordinates: Coordinates, name: String)
     func addObjectCityTiArray(object: CityNames)
     func loadData()
+    func someAsyncFunction() async -> String
 }
 
 final class Presenter: IPresenter {
-    let network: iNetworkService = NetworkService()
+    private let network: iNetworkService    //= NetworkService()
     var arrayCities: [CityNames]=[]
     var view: IView?
     let saver = SaveLoadManager()
+    
+    init (network: iNetworkService){
+        self.network = network
+    }
     
     func cityRequest() {
         network.currentCityRequest { [weak self] data in
@@ -75,6 +80,13 @@ final class Presenter: IPresenter {
             view?.cityArraySearchBefore = arrayCities
             view?.tableViewCitySeenBefore.reloadData()
         }
+    }
+    
+    func someAsyncFunction() async -> String { //???????????????????? HOW
+        
+        return await LocationManager.shared.geoCoding()
+        
+        
     }
     
 }

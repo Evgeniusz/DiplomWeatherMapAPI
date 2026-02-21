@@ -10,7 +10,8 @@ import Foundation
 
 final class Assembly {
     func assemply() -> UIViewController {
-        let presenter = Presenter()
+        let service = NetworkService()
+        let presenter = Presenter(network: service)
         let controller = ViewController(presenter: presenter)
         
         presenter.view = controller

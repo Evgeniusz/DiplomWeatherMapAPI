@@ -39,8 +39,8 @@ final class NetworkService: iNetworkService {
     var coordinates = Coordinates(lat: 51.5073219, lon: -0.1276474)
     let siteURL: String = "https://api.openweathermap.org/"
     var coordinatesURL: String { return "?lon=\(coordinates.lon)&lat=\(coordinates.lat)&units=\(units)&exclude=minutely,hourly,daily,alerts"}
-    let apiKey: String = "&appid=713aa71dc84d2ca8a2ef48566162"
-    let units: String = "metricba05"
+    let apiKey: String = "&appid=713aa71dc84d2ca8a2ef48566162ba05"
+    let units: String = "metric"
     var lanuage: Languages = .Belarus
     
     
@@ -152,11 +152,6 @@ final class NetworkService: iNetworkService {
             }
             complition(data)
         } .resume()
-    }
-    
-    func someAsyncFunction() async { //???????????????????? HOW
-        let city = await locationManager.geoCoding(lat: coordinates.lat, lon: coordinates.lon)
-        
     }
     
     func coordinatesCityRequest(coordinates: Coordinates, complition: @escaping (MainParsing) -> Void){

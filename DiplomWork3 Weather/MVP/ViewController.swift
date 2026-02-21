@@ -186,6 +186,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, IView {
         textFieldCityRequest.delegate = self
         buttonFindCityAction()
         presenter.loadData()
+        
     }
     
     override func viewDidLayoutSubviews() {
@@ -319,8 +320,12 @@ class ViewController: UIViewController, CLLocationManagerDelegate, IView {
     func updateView(data: MainParsing) {
         addAllViews()
         allConstraints()
-        guard let timeZone = data.timeZone else {return}
-        labelCity.text = timeZone.split(separator: "/").last.map(String.init)
+//        guard let timeZone = data.timeZone else {return}
+//        labelCity.text = timeZone.split(separator: "/").last.map(String.init)
+        Task {
+            let currentCity = await presenter.someAsyncFunction()
+            labelCity.text = currentCity
+        }
         guard let icon = data.current?.weather?[0].icon else {return}
         imageWeather.image = UIImage(named: icon)
         guard let temp = data.current?.temp else {return}

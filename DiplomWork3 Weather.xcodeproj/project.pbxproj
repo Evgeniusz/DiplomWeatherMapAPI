@@ -14,7 +14,18 @@
 		18F690D42F2A63E1009220F3 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 18F690D32F2A63E1009220F3 /* SnapKit */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		18E8F21C2F48592F007B64F9 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 18F690A82F2A62DE009220F3 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 18F690AF2F2A62DE009220F3;
+			remoteInfo = "DiplomWork3 Weather";
+		};
+/* End PBXContainerItemProxy section */
+
 /* Begin PBXFileReference section */
+		18E8F2182F48592F007B64F9 /* DiplomWork3 WeatherTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "DiplomWork3 WeatherTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		18F690B02F2A62DE009220F3 /* DiplomWork3 Weather.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "DiplomWork3 Weather.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -29,6 +40,11 @@
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
+		18E8F2192F48592F007B64F9 /* DiplomWork3 WeatherTests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = "DiplomWork3 WeatherTests";
+			sourceTree = "<group>";
+		};
 		18F690B22F2A62DE009220F3 /* DiplomWork3 Weather */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
@@ -40,6 +56,13 @@
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		18E8F2152F48592F007B64F9 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		18F690AD2F2A62DE009220F3 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -59,6 +82,7 @@
 			isa = PBXGroup;
 			children = (
 				18F690B22F2A62DE009220F3 /* DiplomWork3 Weather */,
+				18E8F2192F48592F007B64F9 /* DiplomWork3 WeatherTests */,
 				18F690B12F2A62DE009220F3 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -67,6 +91,7 @@
 			isa = PBXGroup;
 			children = (
 				18F690B02F2A62DE009220F3 /* DiplomWork3 Weather.app */,
+				18E8F2182F48592F007B64F9 /* DiplomWork3 WeatherTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -74,6 +99,29 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		18E8F2172F48592F007B64F9 /* DiplomWork3 WeatherTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 18E8F2202F48592F007B64F9 /* Build configuration list for PBXNativeTarget "DiplomWork3 WeatherTests" */;
+			buildPhases = (
+				18E8F2142F48592F007B64F9 /* Sources */,
+				18E8F2152F48592F007B64F9 /* Frameworks */,
+				18E8F2162F48592F007B64F9 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				18E8F21D2F48592F007B64F9 /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				18E8F2192F48592F007B64F9 /* DiplomWork3 WeatherTests */,
+			);
+			name = "DiplomWork3 WeatherTests";
+			packageProductDependencies = (
+			);
+			productName = "DiplomWork3 WeatherTests";
+			productReference = 18E8F2182F48592F007B64F9 /* DiplomWork3 WeatherTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 		18F690AF2F2A62DE009220F3 /* DiplomWork3 Weather */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 18F690C32F2A62DF009220F3 /* Build configuration list for PBXNativeTarget "DiplomWork3 Weather" */;
@@ -111,6 +159,10 @@
 				LastSwiftUpdateCheck = 1620;
 				LastUpgradeCheck = 1620;
 				TargetAttributes = {
+					18E8F2172F48592F007B64F9 = {
+						CreatedOnToolsVersion = 16.2;
+						TestTargetID = 18F690AF2F2A62DE009220F3;
+					};
 					18F690AF2F2A62DE009220F3 = {
 						CreatedOnToolsVersion = 16.2;
 					};
@@ -140,11 +192,19 @@
 			projectRoot = "";
 			targets = (
 				18F690AF2F2A62DE009220F3 /* DiplomWork3 Weather */,
+				18E8F2172F48592F007B64F9 /* DiplomWork3 WeatherTests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		18E8F2162F48592F007B64F9 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		18F690AE2F2A62DE009220F3 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -155,6 +215,13 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		18E8F2142F48592F007B64F9 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		18F690AC2F2A62DE009220F3 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -164,7 +231,57 @@
 		};
 /* End PBXSourcesBuildPhase section */
 
+/* Begin PBXTargetDependency section */
+		18E8F21D2F48592F007B64F9 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 18F690AF2F2A62DE009220F3 /* DiplomWork3 Weather */;
+			targetProxy = 18E8F21C2F48592F007B64F9 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
 /* Begin XCBuildConfiguration section */
+		18E8F21E2F48592F007B64F9 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.example2.DiplomWork3-WeatherTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/DiplomWork3 Weather.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/DiplomWork3 Weather";
+			};
+			name = Debug;
+		};
+		18E8F21F2F48592F007B64F9 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.example2.DiplomWork3-WeatherTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/DiplomWork3 Weather.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/DiplomWork3 Weather";
+			};
+			name = Release;
+		};
 		18F690C42F2A62DF009220F3 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -349,6 +466,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		18E8F2202F48592F007B64F9 /* Build configuration list for PBXNativeTarget "DiplomWork3 WeatherTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				18E8F21E2F48592F007B64F9 /* Debug */,
+				18E8F21F2F48592F007B64F9 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		18F690AB2F2A62DE009220F3 /* Build configuration list for PBXProject "DiplomWork3 Weather" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (

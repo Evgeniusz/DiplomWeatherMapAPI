@@ -15,6 +15,7 @@ final class LocationManager: NSObject {
    
     private let locationManager = CLLocationManager()
     var currentLocation: CLLocationCoordinate2D?
+    let geoCoder = CLGeocoder()
     
     override init() {
         super.init()
@@ -24,10 +25,9 @@ final class LocationManager: NSObject {
         locationManager.startUpdatingLocation()
     }
     
-    func geoCoding(lat: CLLocationDegrees, lon: CLLocationDegrees) async -> String {
-        let geoCoder = CLGeocoder()
-        let location = CLLocation(latitude: lat, longitude: lon)
+    func geoCoding() async -> String {
         do {
+            guard let location = locationManager.location else {return "no data"}
             guard let cityName = try await geoCoder.reverseGeocodeLocation(location).first?.locality else {return "NoCity"}
             return cityName
         }

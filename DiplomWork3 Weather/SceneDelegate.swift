@@ -18,7 +18,11 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // This delegate does not imply the connecting scene or session are new (see `application:configurationForConnectingSceneSession` instead).
         guard let windowScene = (scene as? UIWindowScene) else { return }
         window = UIWindow(windowScene: windowScene)
-//        let controller = ViewController()
+//        guard ProcessInfo.processInfo.environment["XCTestConfigurationFilePath"] == nil else {
+//               window?.rootViewController = UIViewController()
+//               window?.makeKeyAndVisible()
+//               return
+//           }
         let controller = Assembly().assemply()
         let navigationController = UINavigationController(rootViewController: controller)
         window?.rootViewController = navigationController
