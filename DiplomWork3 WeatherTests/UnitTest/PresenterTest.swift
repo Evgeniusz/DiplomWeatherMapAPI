@@ -9,6 +9,7 @@ import XCTest
 
 enum Results {
     static let radians: CGFloat = 1.5707963267948966
+    static let coordinates: Coordinates = Coordinates(lat: 20, lon: 20)
 }
 
 final class PresenterTest: XCTestCase {
@@ -73,6 +74,14 @@ final class PresenterTest: XCTestCase {
         XCTAssertEqual(saverMock.savedMockArray?.count, 1)
         XCTAssertTrue(saverMock.addedAndSaved)
         XCTAssertEqual(saverMock.count, 1)
+    }
+    
+    func test_cityRequestFromTableViewByCoordinates(){
+        sut.cityRequestFromTableViewByCoordinates(coordinates: Results.coordinates)
+        
+        XCTAssertEqual(networkServiceMock.invokedCoordinatesCityRequestCount, 1)
+        XCTAssertTrue(networkServiceMock.invokedCoordinatesCityRequest)
+        XCTAssertTrue(networkServiceMock.invokedCoordinatesBool)
     }
 
 }

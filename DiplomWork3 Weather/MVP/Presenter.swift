@@ -57,10 +57,9 @@ final class Presenter: IPresenter {
                 self?.view?.addTableView()
                 self?.view?.tableViewSearch.reloadData()
             }
-                                    // MABY HEREEEEE?)
         }
     }
-    //MARK: HERE NEED TO CHECK
+   
     func cityRequestFromTableViewByCoordinates(coordinates: Coordinates){
         network.coordinatesCityRequest(coordinates: coordinates) { [weak self] data in
             self?.view?.updateView(data: data)
@@ -84,11 +83,7 @@ final class Presenter: IPresenter {
         }
     }
     
-    func someAsyncFunction() async -> String { //???????????????????? HOW
-        
+    func someAsyncFunction() async -> String {
         return await LocationManager.shared.geoCoding()
-        
-        
     }
-    
 }

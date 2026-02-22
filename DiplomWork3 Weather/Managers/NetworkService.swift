@@ -39,8 +39,8 @@ final class NetworkService: iNetworkService {
     var coordinates = Coordinates(lat: 51.5073219, lon: -0.1276474)
     let siteURL: String = "https://api.openweathermap.org/"
     var coordinatesURL: String { return "?lon=\(coordinates.lon)&lat=\(coordinates.lat)&units=\(units)&exclude=minutely,hourly,daily,alerts"}
-    let apiKey: String = "&appid=713aa71dc84d2ca8a2ef48566162ba05"
-    let units: String = "metric"
+    let apiKey: String = "&appid=8bc1d35e9657c48f421f53293f"
+    let units: String = "metric98c7fb"
     var lanuage: Languages = .Belarus
     
     
@@ -89,28 +89,6 @@ final class NetworkService: iNetworkService {
             complition(data)
         } .resume()
     }
-    
-//    func cityRequest(text: String, complition: @escaping ([CityNames]) -> Void){
-//        sendRequestWithCityNameByUser(requestType: .GET, endpoints: .baseURlCity, city: text, key: apiKey) { data in
-//            guard let data,
-//                  let json = try? JSON(data: data),
-//                  let array = json.array else {return}
-//            
-//            var cityArrayResponse = [CityNames]()
-//            array.forEach {
-//                if let name = $0["name"].string,
-//                   let lat = $0["lat"].double,
-//                   let lon = $0["lon"].double,
-//                   let country = $0["country"].string
-//                {
-//                    let city = CityNames(name: name, lat: lat, lon: lon, country: country)
-//                    cityArrayResponse.append(city)
-//                }
-//                   
-//            }
-//            complition (cityArrayResponse)
-//        }
-//    }
     
     //MARK: Test block of code 2
     

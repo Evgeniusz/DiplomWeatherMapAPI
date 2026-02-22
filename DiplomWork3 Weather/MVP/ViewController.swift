@@ -445,11 +445,8 @@ class ViewController: UIViewController, CLLocationManagerDelegate, IView {
 //    }
 //    
 //    @objc func keyboardWillShow (_ notificator: Notification) {
-//        
 //    }
-//    
 //    @objc func keyboardWillHide(_ notificator: Notification){
-//        
 //    }
 
 }
