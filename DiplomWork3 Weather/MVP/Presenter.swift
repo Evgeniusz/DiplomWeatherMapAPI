@@ -7,7 +7,7 @@
 
 import UIKit
 import Foundation
-protocol IPresenter {
+protocol IPresenter: AnyObject {
     func cityRequest()
     func findCityRequest(city: String)
     func cityRequestFromTableViewByCoordinates(coordinates: Coordinates)
@@ -20,11 +20,12 @@ protocol IPresenter {
 final class Presenter: IPresenter {
     private let network: iNetworkService    //= NetworkService()
     var arrayCities: [CityNames]=[]
-    var view: IView?
-    let saver = SaveLoadManager()
+    weak var view: IView?
+    let saver: ISafeLoadManager
     
-    init (network: iNetworkService){
+    init (network: iNetworkService, saver: ISafeLoadManager){
         self.network = network
+        self.saver = saver
     }
     
     func cityRequest() {
@@ -34,9 +35,10 @@ final class Presenter: IPresenter {
         }
     }
     
-    func windDirectionRadians(direction: Int) {
+    func windDirectionRadians(direction: Int) -> CGFloat {
         let radians = CGFloat(direction) * .pi / 180
         view?.updateWindDirection(radiance: radians)
+        return radians
     }
     
     func addObjectCityTiArray(object: CityNames){

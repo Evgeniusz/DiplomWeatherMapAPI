@@ -10,7 +10,7 @@ import SnapKit
 import CoreLocation
 import Foundation
 
-protocol IView {
+protocol IView: AnyObject {
     func updateView(data: MainParsing)
     func updateWindDirection(radiance: CGFloat)
     var cityArrayFromBack: [CityNames] {get set}
@@ -27,6 +27,10 @@ class ViewController: UIViewController, CLLocationManagerDelegate, IView {
     private let presenter: IPresenter
     var cityArrayFromBack = [CityNames]()
     var cityArraySearchBefore = [CityNames]()
+    let bigOffset: CGFloat = 50
+    let standartOffset: CGFloat = 16
+    let buttonStandartHeight: CGFloat = 30
+    var windSpeed: Double = 4.01
     
     lazy var tableViewSearch: UITableView = {
         let view = UITableView()
@@ -44,11 +48,6 @@ class ViewController: UIViewController, CLLocationManagerDelegate, IView {
         view.backgroundColor = .clear
         return view
     }()
-    
-    let bigOffset: CGFloat = 50
-    let standartOffset: CGFloat = 16
-    let buttonStandartHeight: CGFloat = 30
-    var windSpeed: Double = 4.01
     
     private let currentButton: UIButton = {
         let button = UIButton(type: .system)
@@ -177,21 +176,23 @@ class ViewController: UIViewController, CLLocationManagerDelegate, IView {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view.
         view.backgroundColor = .systemBlue
         navigationController?.navigationBar.isHidden = true
         burgerButtonAction()
         currentButtonAction()
-        start()
         textFieldCityRequest.delegate = self
         buttonFindCityAction()
         presenter.loadData()
-        
     }
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         generalView.gradient()
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        start()
     }
     
     func start(){

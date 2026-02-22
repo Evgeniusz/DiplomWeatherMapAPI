@@ -11,10 +11,11 @@ import Foundation
 final class Assembly {
     func assemply() -> UIViewController {
         let service = NetworkService()
-        let presenter = Presenter(network: service)
+        let saver = SaveLoadManager()
+        let presenter = Presenter(network: service, saver: saver)
         let controller = ViewController(presenter: presenter)
-        
         presenter.view = controller
+
         return controller
     }
 }
